@@ -1,0 +1,23 @@
+{% load static %}
+{% load bootstrap_icons %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% comment %} {% block addcss %}{% endblock addcss %} {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include "shop/Inc/navbar.html" %}
+    {% block content %}
+    {% endblock content %}
+    {% include "shop/Inc/footer.html" %}
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>

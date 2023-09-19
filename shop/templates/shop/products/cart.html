@@ -1,0 +1,47 @@
+{% extends "shop/layouts/main.html" %}
+
+{% block title %}Shopkar | Cart{% endblock title %}
+{% block content %}
+<div class="container">
+        <h5 class="mt-3">Cart Page</h5>
+        <hr>
+        <table class="table table-responsive table-bordered table-dark align-middle text-center p-0">
+            <tr class=" table-th bg-secondary">
+                <td class="text-warning fw-bold">Images</td>
+                <td class="text-warning fw-bold">CakeName</td>
+                <td class="text-warning fw-bold">Unit</td>
+                <td class="text-warning fw-bold">Qunty</td>
+                <td class="text-warning fw-bold">Amount</td>
+                <td class="text-warning fw-bold">Remove</td>
+            </tr>
+                {% for i in cart %}
+                <tr>
+                    <td><img src="{{i.product.product_image.url}}" alt="{{i.product.name}}" style="height: 75px;"></td>
+                    <td>{{i.product.product_name}}</td>
+                    <td>{{i.product.selling_price | stringformat:'d'}}</td>
+                    <td>{{i.product_qnty}}</td>
+                    <td id="amt">{{i.total_cost | stringformat:'d'}}</td>
+                    <td><a href="{% url 'removecart' i.id %}" onclick="return confirm('Are Remove this Cake form Cart?')" class="btn btn-danger">Remove<i class="fa fa-trash"></i></a></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2"><b>Total amount :</b></td>
+                    <td id="total_amount" class='fw-bold' colspan="1"></td>
+                    <td></td>
+                </tr>
+            
+        </table>
+</div>
+<script>
+    let amount=document.querySelectorAll('#amt');
+    console.log(amount);
+    let arr=Array.from(amount)
+    console.log(arr);
+    let total=arr.reduce((acc,curr)=>{
+        return acc+=Number(curr.textContent)
+    },0);
+    document.getElementById('total_amount').innerHTML="Rs. "+total
+</script>
+{% endblock content %}

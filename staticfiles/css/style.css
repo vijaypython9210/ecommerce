@@ -1,0 +1,23 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100&family=Roboto:wght@600&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100&family=Roboto:wght@100&display=swap');
+*{
+    font-family: sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+}
+
+a{
+    text-decoration: none;
+}
+
+.carousel-item img{
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    height: 70vh;
+}
+
+.cardImg{
+    border:2px sandybrown;
+    height: 40vh;
+}
+

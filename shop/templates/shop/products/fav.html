@@ -1,0 +1,30 @@
+{% extends "shop/layouts/main.html" %}
+
+{% block title %}Shopkar | Cart{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 my-3">
+            <h5>Favourite Page</h5>
+            <hr>
+        </div>
+        <div class="col-12">
+            <table class="table table-responsive table-bordered table-dark align-middle text-center p-0 ">
+                <tr>
+                    <td class='text-danger fw-bold'>Images</td>
+                    <td class='text-danger fw-bold'>ProductName</td>
+                    <td class='text-danger fw-bold'>Remove</td>
+                </tr>
+                
+                {% for i in fav %}
+                <tr class="col-12">
+                <td class="col-4"><img src="{{i.product.product_image.url}}" alt="{{i.product.name}}" style="height: 75px;"></td>
+                <td class="col-4">{{i.product.product_name}}</td>
+                <td class="col-4"><a href="{% url 'removefav' i.id %}" onclick="return confirm('Are Remove this Cake from Favourite ?')" class="btn btn-danger">Remove<i class="fa fa-trash"></i></a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

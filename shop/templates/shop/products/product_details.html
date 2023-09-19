@@ -1,0 +1,141 @@
+{% extends "shop/layouts/main.html" %}
+{% block title %}Shopkart | Product_details{% endblock title %}
+{% load bootstrap_icons %}
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mt-3">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'collectionView' product.category %}">Collections</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{product.product_name}}</li>
+            </ol>
+          </nav>
+        <div class="row">
+            <div class="col-12 bg-light mt-3 p-3">
+                <h4>{{product.product_name}} Cake</h4>
+                <hr>
+            </div>
+            <div class="col-lg-6 col-6 mt-3 text-center">
+                {% if product.quantity <= 100 and product.quantity > 0 %}
+                <div class="badge bg-danger hot" style="position:absolute; z-index:10;">Hot
+                </div>
+                {% endif %}
+                <img class="card-image-top cardImg col-8" src="{{product.product_image.url}}" alt="{{product.product_name}}" style="position: relative;">
+                
+            </div>
+            <div class="col-lg-6 col-6 mt-3">
+                <h4>{{product.product_name}}</h4>
+                <p class='mt-2'>{{product.vendor}}</p>
+                <p>{{product.description}}</p>
+                <p>Current Price:<s> Rs {{product.original_price | stringformat:'d' }}</s></p>
+                <p>Offer Price: Rs {{product.selling_price | stringformat:'d'}}</p>
+                {% if product.quantity > 0 %}
+                <input type="hidden" name="pid" id="pid" value="{{product.id}}">
+                {% csrf_token %}
+                <p>
+                    <div class="btn-group" role="group" style="width: 150px;">
+                        <button type="button" class="btn btn-success" id="minus"><i class="fa fa-minus"></i></button>
+                        <input type="text" class="form-control text-center" id="quantity" value="1"/>
+                        <button type="button" class="btn btn-success" id="plus"><i class="fa fa-plus"></i></button>
+                      </div>
+                </p>
+                {% endif %}
+                <span>
+                    {% if product.quantity > 0 %}
+                    <a href="#" class="btn btn-primary" id="btnCart">Add to Cart {% bs_icon 'cart' %}</a>
+                    {% else %}
+                    <a href="#" class="btn btn-secondary disabled">OutofStock</a>
+                    {% endif %}
+                    <a href="#" class="btn btn-danger" id="heart">{% bs_icon 'heart-fill' %}</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded',function()
+        {
+            let btnPlus=document.getElementById('plus')
+            let txtQnty=document.getElementById('quantity')
+            let btnMinus=document.getElementById('minus')
+            let pid=document.getElementById('pid')
+            let tkn=document.querySelector('[name="csrfmiddlewaretoken"]').value
+            let btnCart=document.getElementById('btnCart')
+            let btnHeart=document.getElementById('heart')
+
+            btnPlus.addEventListener('click',function(){
+                let qnty=parseInt(txtQnty.value,10)
+                qnty=isNaN(qnty)?0:qnty
+                if (qnty<10){
+                    qnty++
+                    txtQnty.value=qnty
+                }  
+            })
+
+            btnMinus.addEventListener('click',function(){
+                let qnty=parseInt(txtQnty.value,10)
+                qnty=isNaN(qnty)?0:qnty
+                if (qnty>1){
+                    qnty--
+                    txtQnty.value=qnty
+                }  
+            })
+
+            btnCart.addEventListener('click',function(){
+                let qnty=parseInt(txtQnty.value,10)
+                qnty=isNaN(qnty)?0:qnty
+                if (qnty>0){
+                    let postObj={
+                        product_qnty:qnty,
+                        product_id:pid.value
+                    }
+                    console.log(postObj)
+                    fetch('/addtocart',{
+                        method:'POST',
+                        credentials:"same-origin",
+                        headers:{
+                            'Accept':'application/json',
+                            'X-Requested-With':'XMLHttpRequest',
+                            'X-CSRFToken':'{{csrf_token}}'
+                        },
+                        body:JSON.stringify(postObj)
+                    }).then(response =>{
+                        return response.json()
+                    }).then(data =>{
+                        // console.log(data);
+                        alert(data['status'])
+                    })
+                }  
+                
+                else{
+                    alert("please enter the quantity")
+                }
+
+            })
+
+            btnHeart.addEventListener('click',function(){
+                let postObj={
+                        product_id:pid.value
+                    }
+                console.log(postObj)
+                fetch('/fav',{
+                    method:'POST',
+                    credentials:"same-origin",
+                    headers:{
+                        'Accept':'application/json',
+                        'X-Requested-With':'XMLHttpRequest',
+                        'X-CSRFToken':'{{csrf_token}}'
+                    },
+                    body:JSON.stringify(postObj)
+                }).then(response =>{
+                    return response.json()
+                }).then(data =>{
+                    // console.log(data);
+                    alert(data['status'])
+                })
+
+            })
+        })
+    </script>
+{% endblock content %}
+
+
