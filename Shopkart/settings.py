@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'shop',
     'bootstrap5',
     'django_bootstrap_icons',
+    'import_export',
 ]
 
 MIDDLEWARE = [
